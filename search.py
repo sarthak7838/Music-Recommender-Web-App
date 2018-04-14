@@ -3,7 +3,7 @@ import difflib
 
 def find(pattern):
     result = []
-    path=r'C:\Users\Mahender Goel\Documents\MUSIC\songs'
+    path=r'E:\songs'
     for root, dirs, files in os.walk(path):
         for name in files:
             d = difflib.SequenceMatcher(None,name, pattern).ratio()
