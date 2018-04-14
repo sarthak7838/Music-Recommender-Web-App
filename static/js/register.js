@@ -24,8 +24,8 @@ function yay(counts,sname,obj) {
 
             var index = 0,
                 playing = false,
-                extension = '',
-                mediaPath = 'https://archive.org/download/mythium/',
+                extension = '.mp3',
+                mediaPath = 'https://ia801504.us.archive.org/13/items/AajJaneKiZidNaKaro/',
                 //mediaPath = 'file:///home/shubham/Documents/projects/MUSIC/party/',
                 buildPlaylist = $.each(tracks, function (key, value) {
                     var trackNumber = value.track,
@@ -40,7 +40,7 @@ function yay(counts,sname,obj) {
                     } else {
                         trackNumber = '' + trackNumber;
                     }
-                    $('#plList').append('<li><div class="plItem"><div class="plNum">' + trackNumber + '.</div><div class="plTitle">' + trackName + '</div><div class="plLength">' + trackLength + '</div></div></li>');
+                    $('#plList').append('<li><div class="plItem"><div class="plNum">' + trackNumber + '.</div><div class="plTitle">' + trackName + '</div></div></li>');
                 }),
                 trackCount = tracks.length,
                 npAction = $('#npAction'),
@@ -100,11 +100,12 @@ function yay(counts,sname,obj) {
                     }
                 }),
                 loadTrack = function (id) {
-                    $('.plSel').removeClass('plSel');
-                    $('#plList li:eq(' + id + ')').addClass('plSel');
+                  $('.plSel').removeClass('plSel');
+                   $('#plList li:eq(' + id + ')').addClass('plSel');
                     npTitle.text(tracks[id].name);
                     index = id;
-                    audio.src = mediaPath + tracks[id].file + extension;
+                    audio.src = mediaPath + tracks[id].name + extension;
+                  //  console.log(audio.src);
                 },
                 playTrack = function (id) {
                     loadTrack(id);
@@ -218,28 +219,26 @@ function yay(counts,sname,obj) {
             song_data: ''+searchTitle
         }, function(data){
 
-            var vSearch = data.list;
-            var searchCount = data.size;
-            //console.log(searchCount);
-            //alert(searchCount);
+            var id = data.id;
+            var sid=data.s2;
+            var sname=data.s1;
             var wikiUrl = 'https://en.wikipedia.org/wiki/';
             $(".searchResults").html("");
-            if(searchCount==0){
+            if(id==-1){
               var html = "<h3 style=\"color:#fff\">Sorry, no result found.</h3>";
               $(".searchResults").html(html);
               $(".searchResults").show();
             }
             else{
-              for(var i=0;i<searchCount;i++){
-              var html ="";
-              // var html = "<div class=\"searchResultCss\">"+"<a href=\""+wikiUrl+vSearch[i].title+"\" target=\"_blank\"><p><strong>"+vSearch[i].title+"</strong></p></a><p>"+vSearch[i].snippet+"...</p>"+"</div>";
-              var html="<div id=\"plList\" class=\"searchResultCss\">"+"<p><strong>"+vSearch[i]+"</strong></p>"+"</div>";
-              $(".searchResults").append(html);
-              $(".searchResults").show();
+              var obj={
+                  id: id
               }
+              yay(sid, sname, obj);
             }
         });
        });
+
+
   });
 
 
@@ -281,7 +280,7 @@ function yay(counts,sname,obj) {
       });*/
 
   function autoSearchSuggestion(searchPrefix){
-      $.getJSON('/search', {
+      $.getJSON('/autosearch', {
             song_data: ''+searchPrefix
         }, function(data){
 
@@ -290,7 +289,7 @@ function yay(counts,sname,obj) {
           var html ="";
           for(var j=0; j<sugArrayLen;j++){
             var liId = "suggLi"+j;
-            html+="<li id=\"plList\""+liId+"\" onclick = \"clickFunc()\">"+sugArray[j]+"</li>";
+            html+="<li id=\""+liId+"\" onmouseover= \"changecolor(this)\" onmouseout =\"normalcolor(this)\" onclick = \"clickFunc(this)\">"+sugArray[j]+"</li>";
             }
           $("#searchSuggestionsUl").html(html);
           $("li").css('padding','3px 10px');
@@ -316,8 +315,13 @@ function yay(counts,sname,obj) {
         }
       });*/
   }
-
-  function clickFunc(){
-     alert("ggg");
-     $("#searchBox").val($("#"+listId).text());
+  function changecolor(el){
+    el.style.background="#dcdfe5";
+  }
+  function normalcolor(el){
+    el.style.background="white";
+  }
+  function clickFunc(el){
+     $("#searchBox").val($(`#${el.id}`).text());
+     $("#searchBtn").click();
   }
