@@ -7,7 +7,7 @@ import shutil
 try:
 	r1=req.get("https://gaana.com/playlist/gaana-dj-best-of-badshah")
 	c1=r1.content
-
+	print(r)
 	soup1=BeautifulSoup(c1,"html.parser")
 	F1=soup1.find_all("a",{"class":"sng_c "})
 	#print(F1)

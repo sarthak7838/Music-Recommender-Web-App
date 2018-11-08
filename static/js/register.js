@@ -25,7 +25,7 @@ function yay(counts,sname,obj) {
             var index = 0,
                 playing = false,
                 extension = '.mp3',
-                mediaPath = 'https://ia801504.us.archive.org/13/items/AajJaneKiZidNaKaro/',
+                mediaPath = 'https://archive.org/download/Song_List/',
                 //mediaPath = 'file:///home/shubham/Documents/projects/MUSIC/party/',
                 buildPlaylist = $.each(tracks, function (key, value) {
                     var trackNumber = value.track,
@@ -290,6 +290,9 @@ function yay(counts,sname,obj) {
           for(var j=0; j<sugArrayLen;j++){
             var liId = "suggLi"+j;
             html+="<li id=\""+liId+"\" onmouseover= \"changecolor(this)\" onmouseout =\"normalcolor(this)\" onclick = \"clickFunc(this)\">"+sugArray[j]+"</li>";
+            }
+            if(sugArrayLen==0){
+              html+="  Sorry! No Results found  ";
             }
           $("#searchSuggestionsUl").html(html);
           $("li").css('padding','3px 10px');
